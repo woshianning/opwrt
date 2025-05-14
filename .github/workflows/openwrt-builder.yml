@@ -31,7 +31,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
+    permissions:
+      contents: write  # 允许读写仓库内容
+      releases: write  # 允许创建和管理发布
+      
     steps:
     - name: Checkout
       uses: actions/checkout@main
