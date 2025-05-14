@@ -1,20 +1,18 @@
 #!/bin/bash
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part2.sh
-# Description: OpenWrt DIY script part 2 (After Update feeds)
-#
-# Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
+# 修改默认后台地址为 192.168.2.1
+sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
 
-# Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+# 添加 WiFi 配置脚本
+mkdir -p files/etc/uci-defaults
+cat <<EOF > files/etc/uci-defaults/99-wifi-enable-ssid
+#!/bin/sh
+uci set wireless.@wifi-device[0].disabled='0'
+uci set wireless.@wifi-iface[0].disabled='0'
+uci set wireless.@wifi-iface[0].ssid='MyNewifi_2.4G'
+uci set wireless.@wifi-device[1].disabled='0'
+uci set wireless.@wifi-iface[1].disabled='0'
+uci set wireless.@wifi-iface[1].ssid='MyNewifi_5G'
+uci commit wireless
+EOF
 
-# Modify default theme
-#sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
-
-# Modify hostname
-#sed -i 's/OpenWrt/P3TERX-Router/g' package/base-files/files/bin/config_generate
+chmod +x files/etc/uci-defaults/99-wifi-enable-ssid
