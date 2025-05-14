@@ -1,6 +1,7 @@
 #!/bin/bash
 # 修改默认后台地址为 192.168.2.1
 sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/luci2/bin/config_generate
 
 # 添加 WiFi 配置脚本
 mkdir -p files/etc/uci-defaults
