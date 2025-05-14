@@ -1,18 +1,24 @@
 #!/bin/bash
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part1.sh
-# Description: OpenWrt DIY script part 1 (Before Update feeds)
-#
-# Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
+# 1. 更新 OpenWrt feeds 配置
+echo "更新 OpenWrt feeds 配置..."
+echo "src-git helloworld https://github.com/fw876/helloworld" >> feeds.conf.default
+echo "更新 feeds 完成"
 
-# Uncomment a feed source
-#sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+# 2. 添加必要的软件包
+echo "安装额外的软件包（如 SSR Plus）..."
+./scripts/feeds update -a
+./scripts/feeds install -a
 
-# Add a feed source
-echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
-#echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+# 3. 安装 WiFi 闭源驱动（MTK 驱动）
+echo "安装 MTK 闭源驱动..."
+./scripts/feeds install kmod-mt7603e
+./scripts/feeds install kmod-mt7615e
+
+# 4. 安装其他依赖
+echo "安装其他依赖包..."
+./scripts/feeds install libustream-openssl
+./scripts/feeds install ipset
+./scripts/feeds install iptables-mod-tproxy
+
+# 完成
+echo "diy-part1.sh 配置完成"
