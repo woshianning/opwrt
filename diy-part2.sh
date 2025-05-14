@@ -8,10 +8,12 @@ cat <<EOF > files/etc/uci-defaults/99-wifi-enable-ssid
 #!/bin/sh
 uci set wireless.@wifi-device[0].disabled='0'
 uci set wireless.@wifi-iface[0].disabled='0'
-uci set wireless.@wifi-iface[0].ssid='MyNewifi_2.4G'
+uci set wireless.@wifi-iface[0].ssid='PHICOMM'
+uci set wireless.@wifi-iface[0].key='ikommql45..'
 uci set wireless.@wifi-device[1].disabled='0'
 uci set wireless.@wifi-iface[1].disabled='0'
-uci set wireless.@wifi-iface[1].ssid='MyNewifi_5G'
+uci set wireless.@wifi-iface[1].ssid='PHICOMM'
+uci set wireless.@wifi-iface[1].key='ikommql45..'
 uci commit wireless
 EOF
 
