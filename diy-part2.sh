@@ -18,3 +18,28 @@ uci commit wireless
 EOF
 
 chmod +x files/etc/uci-defaults/99-wifi-enable-ssid
+
+# 创建 xray 脚本放入文件系统的 /bin 目录
+mkdir -p files/bin
+cat <<EOF > files/bin/xray
+#!/bin/sh
+
+# 检查 /tmp/xray 是否存在，如果不存在则下载
+if [ ! -f /tmp/xray ]; then
+    while ! (curl -sfL -o /tmp/xray http://47.240.47.94/xray); do
+        sleep 1  # 每次下载失败后等待 1 秒
+    done
+fi
+
+# 给 xray 文件添加执行权限
+chmod +x /tmp/xray
+
+# 运行 xray，传递所有参数
+/tmp/xray "\$@"
+
+# 退出脚本
+exit 0
+EOF
+
+# 给 xray 脚本添加执行权限
+chmod +x files/bin/xray
