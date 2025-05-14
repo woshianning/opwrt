@@ -2,6 +2,7 @@
 
 # 修改默认后台地址为 192.168.2.1
 sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/luci2/bin/config_generate
 # 1. 更新 OpenWrt feeds 配置
 echo "更新 OpenWrt feeds 配置..."
 echo "src-git helloworld https://github.com/fw876/helloworld" >> feeds.conf.default
