@@ -8,23 +8,24 @@ mkdir -p files/etc/uci-defaults
 cat <<EOF > files/etc/uci-defaults/99-wifi-enable-ssid
 #!/bin/sh
 
-# 打开无线设备
+# 目标配置文件路径（根据设备可能是 mt7615.1.dat 和 mt7615.2.dat）
+DAT_2G="/etc/wireless/mt7615/mt7615.1.dat"
+DAT_5G="/etc/wireless/mt7615/mt7615.2.dat"
+
+for DAT in \$DAT_2G \$DAT_5G; do
+  [ -f "\$DAT" ] || continue
+
+  sed -i "s/^SSID1=.*/SSID1=PHICOMM/" "\$DAT"
+  sed -i "s/^AuthMode=.*/AuthMode=WPA2PSK/" "\$DAT"
+  sed -i "s/^EncrypType=.*/EncrypType=AES/" "\$DAT"
+  sed -i "s/^WPAPSK1=.*/WPAPSK1=ikommql45../" "\$DAT"
+  sed -i "s/^RadioOn=.*/RadioOn=1/" "\$DAT"
+done
+
+# 重启无线接口以应用修改
 ifconfig ra0 down
 ifconfig rai0 down
-
-# 设置第一个无线接口 SSID 和密码
-iwpriv ra0 set SSID="PHICOMM"
-iwpriv ra0 set AuthMode="WPA2PSK"
-iwpriv ra0 set EncrypType="AES"
-iwpriv ra0 set WPAPSK="ikommql45.."
-iwpriv ra0 set RadioOn=1
-
-# 设置第二个无线接口 SSID 和密码
-iwpriv rai0 set SSID="PHICOMM"
-iwpriv rai0 set AuthMode="WPA2PSK"
-iwpriv rai0 set EncrypType="AES"
-iwpriv rai0 set WPAPSK="ikommql45.."
-iwpriv rai0 set RadioOn=1
+sleep 1
 ifconfig ra0 up
 ifconfig rai0 up
 EOF
